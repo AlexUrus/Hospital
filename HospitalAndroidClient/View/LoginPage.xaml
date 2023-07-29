@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HospitalAndroidClient.MainPage"
+             xmlns:viewModel ="clr-namespace:HospitalAndroidClient.ViewModel">
+    <ContentPage.BindingContext>
+        <viewModel:LoginViewModel/>
+    </ContentPage.BindingContext>
+
+    <StackLayout BackgroundColor="WhiteSmoke" >
+        <Frame BackgroundColor="CadetBlue" HeightRequest="70" />
+        <Label Text="Введите имя:" FontSize="18"/>
+        <Entry Text="{Binding UserName}"/>
+        <Label Text="Введите пароль:" FontSize="18"/>
+        <Entry Text="{Binding Password}" IsPassword="True"/>
+        <Button Text="Войти" Command="{Binding SendMessageCommand}"/>
+    </StackLayout>
+
+</ContentPage>
