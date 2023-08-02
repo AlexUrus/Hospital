@@ -14,7 +14,6 @@ namespace HospitalAndroidClient
         public MainPage()
         {
             InitializeComponent();
-            this.BindingContext = new LoginViewModel();
         }
     }
 }

@@ -102,43 +102,5 @@ namespace HospitalLib.Tcp
                 Remove((HospitalTcpClient)sender);
             }
         }
-        /*
-        private async Task ProcessAsync(TcpClient tcpClient)
-        {
-            using (var stream = tcpClient.GetStream())
-            {
-                var buffer = new byte[65000];
-                string data;
-
-                try
-                {
-                    int bytesRead;
-                    while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) != 0)
-                    {
-                        data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        OnDataReceived(data);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    _logger.Info($"TCP client disconnected");
-                }
-            }
-        }
-
-        private void OnDataReceived(string data)
-        {
-            try
-            {
-                _logger.Info($"Server received message from MPOS Device: {data.Replace("\0", string.Empty)}");
-                string json = data.Replace("\0", string.Empty);
-                MessageReceived.Invoke(this, new ReceivedMessageEventArgs(JsonConvert.DeserializeObject<AbstractRecord>(json)));
-            }
-            catch (Exception ex)
-            {
-                _logger.Debug($"TCP: {ex.Message}");
-                _logger.Error(ex.StackTrace);
-            }
-        }*/
     }
 }

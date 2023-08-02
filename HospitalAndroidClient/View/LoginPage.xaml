@@ -10,10 +10,10 @@
     <StackLayout BackgroundColor="WhiteSmoke" >
         <Frame BackgroundColor="CadetBlue" HeightRequest="70" />
         <Label Text="Введите имя:" FontSize="18"/>
-        <Entry Text="{Binding UserName}"/>
+        <Entry Text="{Binding Username}"/>
         <Label Text="Введите пароль:" FontSize="18"/>
         <Entry Text="{Binding Password}" IsPassword="True"/>
-        <Button Text="Войти" Command="{Binding SendMessageCommand}"/>
+        <Button Text="Войти" Command="{Binding SendMessageCommand }"/>
     </StackLayout>
 
 </ContentPage>

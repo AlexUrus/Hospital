@@ -1,10 +1,8 @@
-﻿using HospitalLib;
-using HospitalLib.Event;
+﻿using HospitalLib.Event;
 using HospitalLib.Model;
 using HospitalLib.Record;
 using HospitalLib.Tcp;
-using Newtonsoft.Json.Linq;
-using ReactiveUI;
+using HospitalLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,7 +23,7 @@ namespace HospitalServer.ViewModel
             Patients = new ObservableCollection<Patient>();
             tcpServer = HospitalTcpServer.Instance;
             tcpServer.MessageReceived += OnTcpMessageReceived;
-            tcpServer.RunAsync(7000,500000);
+            tcpServer.RunAsync(7000, 500000);
 
         }
 

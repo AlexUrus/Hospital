@@ -1,20 +1,24 @@
-﻿using HospitalLib;
+﻿using HospitalAndroidClient.View;
+using HospitalLib;
+using HospitalLib.Model;
 using HospitalLib.Record;
 using HospitalLib.Tcp;
 using Newtonsoft.Json;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace HospitalAndroidClient.ViewModel
 {
     public class LoginViewModel : BaseViewModel
     {
         private string _username;
-        public string UserName 
+        public string Username 
         {
             get { return _username; }
             set
@@ -44,20 +48,14 @@ namespace HospitalAndroidClient.ViewModel
         public LoginViewModel()
         {
             SendMessageCommand = ReactiveCommand.CreateFromTask(SendMessage);
+            TcpClient tcpClient = new TcpClient("192.168.0.106", 7000 );
+            _tcpClient = new HospitalTcpClient(tcpClient, 6000 * 1000);
         }
 
         private async Task SendMessage()
         {
-            await Task.Run(() =>
-            {
-                AbstractRecord record = new ClientLoginRecord()
-                {
-                    Username = _username,
-                    Password = _password
-                };
-                string json = JsonConvert.SerializeObject(record);
-                //_tcpClient.Send(json);
-            });
+            await _tcpClient.SendAsync(new PatientRecord(new Patient() { Username = _username, Password = _password } ));
+            Application.Current.MainPage = new NavigationPage(new ChoiceDoctorPage());
         }
     }
 }

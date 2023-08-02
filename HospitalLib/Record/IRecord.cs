@@ -6,6 +6,6 @@ namespace HospitalLib.Record
 {
     public interface IRecord
     {
-        TypeRecord Type { get; set; }
+        TypeRecord Type { get; }
     }
 }
