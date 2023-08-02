@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HospitalLib.DataStorage;
 
 namespace HospitalServer.ViewModel
 {
@@ -17,9 +18,11 @@ namespace HospitalServer.ViewModel
         public ObservableCollection<Patient> Patients { get; set; }
 
         HospitalTcpServer tcpServer;
+        DataRepository repository;
 
         public MainViewModel()
         {
+            repository = new DataRepository();
             Patients = new ObservableCollection<Patient>();
             tcpServer = HospitalTcpServer.Instance;
             tcpServer.MessageReceived += OnTcpMessageReceived;
