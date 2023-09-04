@@ -26,6 +26,7 @@ namespace HospitalLib.Tcp
         private CancellationTokenSource cst;
         private Type _classRecordType;
         public string IpAddress => _ipAddress;
+        public string ClientId { get; set; }
         public EventHandler<ConnectionChangedEventArgs> ConnectionChanged;
         public EventHandler<ReceivedMessageEventArgs> ReceivedMessage;
 
@@ -38,16 +39,17 @@ namespace HospitalLib.Tcp
             _ipAddress = point.Address.ToString();
             _buffer = new MemoryStream();
             cst = new CancellationTokenSource();
+            Random random = new Random();
+            ClientId = _ipAddress + random.Next();
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
             if (_tcpClient.Connected)
             {
                 StartReadThread();
                 _logger.Warn($"Client connected, {_tcpClient?.Client.Connected}");
                 ConnectionChanged?.Invoke(this, new ConnectionChangedEventArgs(IpAddress, true));
-                return;
             }
         }
 
@@ -78,7 +80,7 @@ namespace HospitalLib.Tcp
                 while ((i = await _stream.ReadAsync(bytes, 0, bytes.Length, CreateToken.Token)) != 0)
                 {
                     data = Encoding.UTF8.GetString(bytes, 0, i);
-                    OnDataReceived(Encoding.UTF8.GetBytes(data));
+                    await OnDataReceived(Encoding.UTF8.GetBytes(data));
                 }
             }
             catch (Exception ex)
@@ -114,7 +116,7 @@ namespace HospitalLib.Tcp
             }
         }
 
-        private void OnDataReceived(byte[] bytes)
+        private async Task OnDataReceived(byte[] bytes)
         {
             try
             {
@@ -124,8 +126,7 @@ namespace HospitalLib.Tcp
                 Array.Clear(buffer, 0, buffer.Length);
 
                 _logger.Info($"Server received message from MPOS Device: {bufferString.Replace("\0", string.Empty)}");
-                OnMessageReceived(bufferString);
-
+                await OnMessageReceived(bufferString);
             }
             catch (Exception ex)
             {
@@ -138,7 +139,7 @@ namespace HospitalLib.Tcp
             }
         }
 
-        private void OnMessageReceived(string jsonMessage)
+        private async Task OnMessageReceived(string jsonMessage)
         {
             try
             {
@@ -154,9 +155,9 @@ namespace HospitalLib.Tcp
                         SetRecordType(type);
                         object record = new object();
                         if (_classRecordType != null) record = JsonConvert.DeserializeObject(jsonMessage, _classRecordType);
-                        ReceivedMessage?.Invoke(this, new ReceivedMessageEventArgs(record,type));
+                        await Task.Run(() => ReceivedMessage?.Invoke(this, new ReceivedMessageEventArgs(record, type, ClientId)));
                     }
-                } 
+                }
             }
             catch (Exception ex)
             {

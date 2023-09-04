@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Reactive;
 using System.Text;
@@ -38,24 +39,68 @@ namespace HospitalAndroidClient.ViewModel
         }
         private HospitalTcpClient _tcpClient;
 
-
         private ReactiveCommand<Unit, Unit> _sendMessageCommand;
-        public ReactiveCommand<Unit, Unit> SendMessageCommand
+        public ReactiveCommand<Unit, Unit> LoginCommand
         {
             get => _sendMessageCommand;
             set => this.RaiseAndSetIfChanged(ref _sendMessageCommand, value);
         }
-        public LoginViewModel()
+        private ReactiveCommand<Unit, Unit> _registrationUserCommand;
+        public ReactiveCommand<Unit, Unit> RegistrationUserCommand
         {
-            SendMessageCommand = ReactiveCommand.CreateFromTask(SendMessage);
-            TcpClient tcpClient = new TcpClient("192.168.0.106", 7000 );
-            _tcpClient = new HospitalTcpClient(tcpClient, 6000 * 1000);
+            get => _registrationUserCommand;
+            set => this.RaiseAndSetIfChanged(ref _registrationUserCommand, value);
         }
 
-        private async Task SendMessage()
+        public LoginViewModel()
         {
-            await _tcpClient.SendAsync(new PatientRecord(new Patient() { Username = _username, Password = _password } ));
-            Application.Current.MainPage = new NavigationPage(new ChoiceDoctorPage());
+            RegistrationUserCommand = ReactiveCommand.CreateFromTask(RegistrationUser);
+            LoginCommand = ReactiveCommand.Create(Login);
+            TcpClient tcpClient = new TcpClient("192.168.0.106", 7000);
+            _tcpClient = new HospitalTcpClient(tcpClient, 60 * 1000);
+        }
+
+        private async Task RegistrationUser()
+        {
+            await SendRegistrationRequest();
+            /*
+            Patient patient = _dataRepository.GetPatient(Username);
+            if (patient == null)
+            {
+                SendRegistrationRequest();
+                Application.Current.MainPage = new NavigationPage(new ChoiceDoctorPage());
+            }
+            else
+            {
+                ShowMessage("Ошибка", "Пользователь уже существует.");
+            }*/
+        }
+
+        private async Task SendRegistrationRequest()
+        {
+            await _tcpClient.SendAsync(new PatientRecord(new Patient() { Username = Username, Password = Password }));
+        }
+
+        private void Login()
+        {/*
+            Patient patient = _dataRepository.GetPatient(Username);
+            if (patient == null)
+            {
+                ShowMessage("Ошибка", "Логин неверен.");
+            }
+            else if (patient.Password != Password)
+            {
+                ShowMessage("Ошибка", "Пароль неверен.");
+            }
+            else
+            {
+                Application.Current.MainPage = new NavigationPage(new ChoiceDoctorPage());
+            }*/
+        }
+
+        private async void ShowMessage(string title, string message)
+        {
+            await Application.Current.MainPage.DisplayAlert(title, message, "OK");
         }
     }
 }

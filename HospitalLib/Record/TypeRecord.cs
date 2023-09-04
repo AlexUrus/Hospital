@@ -6,6 +6,7 @@ namespace HospitalLib.Record
 {
     public enum TypeRecord
     {
-        ClientLogin = 1
+        ClientLogin = 1,
+        ResultOperation = 2
     }
 }

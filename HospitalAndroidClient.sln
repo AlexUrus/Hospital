@@ -11,7 +11,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalAndroidClient", "Ho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalLib", "HospitalLib\HospitalLib.csproj", "{511CC01B-5519-4C2C-89B5-BFFA93EBD5F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HospitalServer", "HospitalServer\HospitalServer.csproj", "{37FE20A6-9E5C-44D4-A17C-881CA94CD165}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HospitalServer", "HospitalServer\HospitalServer.csproj", "{37FE20A6-9E5C-44D4-A17C-881CA94CD165}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{23517D78-58AD-4F46-8577-32BCE62340C3}"
+	ProjectSection(SolutionItems) = preProject
+		Задачи.txt = Задачи.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -26,5 +26,10 @@ namespace HospitalLib.DataStorage
                 optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=HospitalDb;Trusted_Connection=True;");
             }
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Patient>().HasKey(k => k.Username);
+        }
     }
 }

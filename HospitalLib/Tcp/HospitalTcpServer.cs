@@ -21,6 +21,7 @@ namespace HospitalLib.Tcp
         private int _port;
         public EventHandler<ReceivedMessageEventArgs> MessageReceived;
         public EventHandler<ConnectionChangedEventArgs> ClientConnectionChanged;
+        public event EventHandler<NotificationEventArgs> NotificationSent;
 
         private List<HospitalTcpClient> _clients = new List<HospitalTcpClient>();
         private readonly object _clientLock = new object();
@@ -49,7 +50,7 @@ namespace HospitalLib.Tcp
             }
         }
 
-        private void Add(HospitalTcpClient client)
+        private async void Add(HospitalTcpClient client)
         {
             lock (_clientLock)
             {
@@ -61,7 +62,7 @@ namespace HospitalLib.Tcp
             {
                 client.ConnectionChanged += OnClientConnectionChanged;
                 client.ReceivedMessage += OnMessageReceived;
-                client.Start();
+                await client.StartAsync();
             }
             catch (Exception ex)
             {
@@ -100,6 +101,21 @@ namespace HospitalLib.Tcp
             if (!e.IsConnected)
             {
                 Remove((HospitalTcpClient)sender);
+            }
+        }
+
+        public async Task SendMessageToClientAsync(string clientId, IRecord record)
+        {
+            HospitalTcpClient client;
+
+            lock (_clientLock)
+            {
+                client = _clients.FirstOrDefault(c => c.ClientId.Equals(clientId));
+            }
+
+            if (client != null)
+            {
+                await client.SendAsync(record);
             }
         }
     }

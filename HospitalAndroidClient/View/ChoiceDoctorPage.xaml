@@ -3,20 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="HospitalAndroidClient.View.ChoiceDoctorPage"
              xmlns:viewModel ="clr-namespace:HospitalAndroidClient.ViewModel"
-             xmlns:converters="clr-namespace:HospitalLib.Converters;assembly=HospitalLib">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <ContentPage.BindingContext>
         <viewModel:ChoiceDoctorViewModel/>
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
         <StackLayout>
-            <ListView ItemsSource="{Binding DoctorsList}">
+            <ListView ItemsSource="{Binding DoctorsList}" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Padding="10">
-                                <Label Text="{Binding Name}" FontSize="18"/>
-                                <Label Text="{Binding Type }" FontSize="16" TextColor="Gray"/>
+                                <Label Text="{Binding Name}" FontSize="18" />
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

@@ -10,10 +10,6 @@ namespace HospitalLib.Model
         Dermatologist = 2,
         Otolaryngologist = 3,
         Psychologist = 4,
-        Gastroenterologist = 5, 
-
-
+        Gastroenterologist = 5
     }
-
-
 }

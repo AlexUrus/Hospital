@@ -13,7 +13,8 @@
         <Entry Text="{Binding Username}"/>
         <Label Text="Введите пароль:" FontSize="18"/>
         <Entry Text="{Binding Password}" IsPassword="True"/>
-        <Button Text="Войти" Command="{Binding SendMessageCommand }"/>
+        <Button Text="Войти" Command="{Binding LoginCommand }"/>
+        <Button Text="Зарегистрироваться" Command="{Binding RegistrationUserCommand}"/>
     </StackLayout>
 
 </ContentPage>

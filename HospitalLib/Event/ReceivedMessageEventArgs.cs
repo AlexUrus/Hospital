@@ -9,10 +9,12 @@ namespace HospitalLib.Event
     {
         public object Record  { get; private set; }
         public TypeRecord TypeRecord { get; private set; }
-        public ReceivedMessageEventArgs(object record, TypeRecord typeRecord) 
+        public string IdClient { get; private set; }
+        public ReceivedMessageEventArgs(object record, TypeRecord typeRecord, string idClient) 
         {
             Record = record;
             TypeRecord = typeRecord;
+            IdClient = idClient;
         }
     }
 }

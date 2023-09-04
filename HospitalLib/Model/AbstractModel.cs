@@ -4,7 +4,7 @@ using System.Text;
 
 namespace HospitalLib.Model
 {
-    internal class AbstractModel
+    abstract class AbstractModel
     {
     }
 }

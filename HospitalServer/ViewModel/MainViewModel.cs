@@ -22,30 +22,54 @@ namespace HospitalServer.ViewModel
 
         public MainViewModel()
         {
-            repository = new DataRepository();
+            repository = DataRepository.Instance;
             Patients = new ObservableCollection<Patient>();
             tcpServer = HospitalTcpServer.Instance;
             tcpServer.MessageReceived += OnTcpMessageReceived;
+            tcpServer.NotificationSent += OnNotificationSent;
             tcpServer.RunAsync(7000, 500000);
 
         }
 
-        private void OnTcpMessageReceived(object sender, ReceivedMessageEventArgs e)
+        private void OnNotificationSent(object sender, NotificationEventArgs e)
+        {
+            // В этом методе можно обработать уведомление, например, обновить пользовательский интерфейс
+            // на основе полученного результата операции.
+        }
+
+        private async void OnTcpMessageReceived(object sender, ReceivedMessageEventArgs e)
         {
             switch (e.TypeRecord)
             {
                 case TypeRecord.ClientLogin:
-                    CreatePatient((PatientRecord)e.Record);
+                    var result = CreatePatient((PatientRecord)e.Record);
+                    await SendStatusAsync(e.IdClient, result);
                     break;
                 default:
                     break;
             }
         }
 
-        private void CreatePatient(PatientRecord record)
+        private ResultOperation CreatePatient(PatientRecord record)
         {
-            var patient = new Patient { Username = record.Value.Username, Password = record.Value.Password };
-            Patients.Add(patient);
+            if (record != null && !repository.PatientExists(record.Value.Username))
+            {
+                var patient = new Patient { Username = record.Value.Username, Password = record.Value.Password };
+                repository.SetPatient(patient);
+                Patients.Add(patient);
+                return new ResultOperation(ResultOperation.E_OK, "");
+            }
+            else
+            {
+                return new ResultOperation(ResultOperation.E_INV_PARAM, "");
+            }
+            
         }
+
+        private async Task SendStatusAsync(string idClient, ResultOperation resultOperation)
+        {
+            await tcpServer.SendMessageToClientAsync(idClient, resultOperation);
+        }
+
     }
 }

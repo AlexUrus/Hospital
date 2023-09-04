@@ -7,7 +7,6 @@ namespace HospitalLib.Model
 {
     public class Patient
     {
-        public int Id { get; set; }
         [JsonProperty(PropertyName = "Username")]
         public string Username { get; set; }
         [JsonProperty(PropertyName = "Password")]
